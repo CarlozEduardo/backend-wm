@@ -1,5 +1,6 @@
 package api.wm.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,17 +21,9 @@ public class Produto {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    @ManyToMany
-    @JoinTable(
-            name = "produto_venda",
-            joinColumns = @JoinColumn(name = "produto_id"),
-            inverseJoinColumns = @JoinColumn(name = "venda_id")
-    )
-    private List<Venda> vendas;
-
-    public Produto() {
-        vendas = new ArrayList<>();
-    }
+    @ManyToMany(mappedBy = "produtos")
+    @JsonBackReference
+    private List<Venda> vendas = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -80,16 +73,11 @@ public class Produto {
         this.categoria = categoria;
     }
 
-    @Override
-    public String toString() {
-        return "Produto{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", codigo='" + codigo + '\'' +
-                ", preco=" + preco +
-                ", quantidade=" + quantidade +
-                ", categoria=" + categoria +
-                ", vendas=" + vendas +
-                '}';
+    public List<Venda> getVendas() {
+        return vendas;
+    }
+
+    public void setVendas(List<Venda> vendas) {
+        this.vendas = vendas;
     }
 }

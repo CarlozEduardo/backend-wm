@@ -1,8 +1,10 @@
 package api.wm.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,8 +13,14 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(mappedBy = "vendas")
-    private List<Produto> produtos;
+    @ManyToMany
+    @JoinTable(
+            name = "venda_produto",
+            joinColumns = @JoinColumn(name = "venda_id"),
+            inverseJoinColumns = @JoinColumn(name = "produto_id")
+    )
+    @JsonManagedReference
+    private List<Produto> produtos = new ArrayList<>();
 
     private String cpf;
 
@@ -38,5 +46,22 @@ public class Venda {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public void adicionarProduto(Produto produto) {
+        produtos.add(produto);
+    }
+
+    public void removerProduto(Produto produto) {
+        produtos.remove(produto);
+    }
+
+    @Override
+    public String toString() {
+        return "Venda{" +
+                "id=" + id +
+                ", produtos=" + produtos +
+                ", cpf='" + cpf + '\'' +
+                '}';
     }
 }

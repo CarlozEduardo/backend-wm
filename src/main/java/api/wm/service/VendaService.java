@@ -7,10 +7,12 @@ import api.wm.repository.ProdutoRepository;
 import api.wm.repository.VendaRepository;
 import api.wm.domain.dto.VendaRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,26 +22,41 @@ public class VendaService {
     private VendaRepository vendaRepository;
     @Autowired
     private ProdutoRepository produtoRepository;
+    @Autowired
+    private CupomService cupomService;
 
     public Venda salvar(Venda venda) {
-        if (venda.getProdutos().isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Lista vazia!");
+        if (venda.getProdutos().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lista de produtos vazia!");
+        }
+
+        List<Produto> produtosAtualizados = new ArrayList<>();
 
         for (Produto produto : venda.getProdutos()) {
             Produto produtoDoBanco = produtoRepository.findByCodigo(produto.getCodigo())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "Não existe um produto com esse código"));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
 
-            if(produtoDoBanco.getQuantidade() < produto.getQuantidade()) throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Produto sem estoque suficiente");
+            if (produtoDoBanco.getQuantidade() < produto.getQuantidade()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto sem estoque suficiente");
+            }
 
             produtoDoBanco.setQuantidade(produtoDoBanco.getQuantidade() - produto.getQuantidade());
-            produtoRepository.save(produtoDoBanco);
-            // -----------------------------------------------------------------
-            produto.setId(produtoDoBanco.getId());
-            produto.setNome(produto.getNome());
-            produto.setPreco(produto.getPreco());
-            produto.setCategoria(produto.getCategoria());
+            produtosAtualizados.add(produtoDoBanco);
         }
 
-        return vendaRepository.save(venda);
+        venda.setProdutos(produtosAtualizados);
+
+        Venda vendaSalva = vendaRepository.save(venda);
+        produtoRepository.saveAll(produtosAtualizados);
+
+
+        try {
+            cupomService.imprimirCupom(vendaSalva);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao imprimir cupom fiscal", e);
+        }
+
+        return vendaSalva;
     }
 
     public List<Venda> listar() {
