@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
@@ -18,7 +19,7 @@ public class CategoriaController {
 
     @PostMapping
     public ResponseEntity<CategoriaRequestDTO> criar(@RequestBody CategoriaRequestDTO categoria) {
-        return ResponseEntity.ok(
+        return ResponseEntity.created(null).body(
                 CategoriaMapper.toDTO(
                         categoriaService.salvar(
                                 CategoriaMapper.to(categoria)

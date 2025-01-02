@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
 public class VendaRequestDTO {
     private List<ProdutoDTO> produtos;
     private String cpf;

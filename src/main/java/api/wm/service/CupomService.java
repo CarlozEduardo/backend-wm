@@ -37,7 +37,7 @@ public class CupomService {
         double total = 0;
         for (Produto produto : venda.getProdutos()) {
 
-            cupom.append(String.format("%-9s %-11.2f %-12s\n", produto.getNome(), produto.getQuantidade(),
+            cupom.append(String.format("%-9s %-12.2f %-12s\n", produto.getNome(), produto.getQuantidade(),
                     String.format("R$ %.2f", produto.getPreco())));
 
             total += produto.getPreco() * produto.getQuantidade();
@@ -48,8 +48,8 @@ public class CupomService {
         cupom.append("----------------------------------\n");
         cupom.append("\n");
         cupom.append("Obrigado pela sua compra!\n");
-        cupom.append("Obs: em caso de devolucao ou troca\n");
-        cupom.append("     apresente o cupom!\n");
+        cupom.append("Obs: Troca em até 2 dias a partir\n");
+        cupom.append("da data de venda com apresentacao do cupom!\n");
 
         // Obtenha o serviço de impressão padrão
         PrintService printService = PrintServiceLookup.lookupDefaultPrintService();
