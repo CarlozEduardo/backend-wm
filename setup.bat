@@ -1,15 +1,23 @@
 @echo off
-echo Rodando repositórios...
+echo Iniciando Front-End e Back-End...
 
-:: Rodar repositório Node.js
-cd .\freela-wm
-git pull
-start npm start
+:: Iniciar o Front-End em um novo terminal
+start "" cmd /k "cd freela-wm && git pull && npm install && npm run dev"
 
-:: Rodar repositório Java (Spring Boot)
-cd .\backend-wm
+:: Iniciar o Back-End no terminal atual
+cd backend-wm
 git pull
+if errorlevel 1 (
+    echo Falha ao atualizar o back-end.
+    pause
+    exit /b 1
+)
 .\mvnw spring-boot:run
+if errorlevel 1 (
+    echo Falha ao iniciar o back-end.
+    pause
+    exit /b 1
+)
 
 echo Configuração concluída!
 pause

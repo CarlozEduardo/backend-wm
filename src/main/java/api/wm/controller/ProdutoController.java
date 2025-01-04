@@ -18,12 +18,10 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @PostMapping
-    public ResponseEntity<ProdutoRequestDTO> criar(@RequestBody ProdutoRequestDTO produto) {
+    public ResponseEntity<Produto> criar(@RequestBody ProdutoRequestDTO produto) {
         return ResponseEntity.ok(
-                ProdutoMapper.toDTO(
-                        produtoService.salvar(
-                                ProdutoMapper.to(produto)
-                        )
+                produtoService.salvar(
+                        ProdutoMapper.to(produto)
                 )
         );
     }
@@ -36,38 +34,30 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProdutoRequestDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(
-                ProdutoMapper.toDTO(
-                        produtoService.buscarPorId(id)
-                )
+                produtoService.buscarPorId(id)
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoRequestDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO) {
+    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO) {
         return ResponseEntity.ok(
-                ProdutoMapper.toDTO(
-                        produtoService.atualizar(id, ProdutoMapper.to(produtoRequestDTO))
-                )
+                produtoService.atualizar(id, ProdutoMapper.to(produtoRequestDTO))
         );
     }
 
     @PatchMapping("/{id}/diminuir/{qtd}")
-    public ResponseEntity<ProdutoRequestDTO> diminuir(@PathVariable Long id, @PathVariable Double qtd) {
+    public ResponseEntity<Produto> diminuir(@PathVariable Long id, @PathVariable Double qtd) {
         return ResponseEntity.ok(
-                ProdutoMapper.toDTO(
-                        produtoService.atualizarQtd(id, qtd, "DIMINUIR")
-                )
+                produtoService.atualizarQtd(id, qtd, "DIMINUIR")
         );
     }
 
     @PatchMapping("/{id}/aumentar/{qtd}")
-    public ResponseEntity<ProdutoRequestDTO> adicionar(@PathVariable Long id, @PathVariable Double qtd) {
+    public ResponseEntity<Produto> adicionar(@PathVariable Long id, @PathVariable Double qtd) {
         return ResponseEntity.ok(
-                ProdutoMapper.toDTO(
-                        produtoService.atualizarQtd(id, qtd, "AUMENTAR")
-                )
+                produtoService.atualizarQtd(id, qtd, "AUMENTAR")
         );
     }
 

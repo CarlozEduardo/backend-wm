@@ -21,14 +21,10 @@ public class ProdutoService {
     public Produto salvar(Produto produto) {
         if (produtoRepository.existsByCodigo(produto.getCodigo())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código já existente");
 
-        System.out.println(produto.getCategoria().getId());
-        System.out.println(categoriaRepository.findById(produto.getCategoria().getId()).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "Não existe essa categoria")));
-
         produto.setCategoria(
                 categoriaRepository.findById(produto.getCategoria().getId()).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "Não existe essa categoria"))
         );
 
-        System.out.println(produto.toString());
         return produtoRepository.save(produto);
     }
 
