@@ -80,4 +80,8 @@ public class Produto {
     public void setVendas(List<Venda> vendas) {
         this.vendas = vendas;
     }
+
+    public void addVenda(Venda venda) {
+        this.vendas.add(venda);
+    }
 }

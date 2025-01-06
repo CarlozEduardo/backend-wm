@@ -42,13 +42,16 @@ public class VendaService {
 
             produtoDoBanco.setQuantidade(produtoDoBanco.getQuantidade() - produto.getQuantidade());
             produtosAtualizados.add(produtoDoBanco);
+
+            produto.setId(produtoDoBanco.getId());
+            produto.setPreco(produtoDoBanco.getPreco());
+            produto.setCategoria(produtoDoBanco.getCategoria());
+            produto.setNome(produtoDoBanco.getNome());
         }
 
-        venda.setProdutos(produtosAtualizados);
-
-        Venda vendaSalva = vendaRepository.save(venda);
         produtoRepository.saveAll(produtosAtualizados);
 
+        Venda vendaSalva = vendaRepository.save(venda);
 
         try {
             cupomService.imprimirCupom(vendaSalva);

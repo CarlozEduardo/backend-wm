@@ -30,7 +30,7 @@ public class CupomService {
         cupom.append("\n");
         cupom.append("Codigo da Venda: ").append(venda.getId()).append("\n");
         cupom.append("Data: ").append(dataFormatada).append("\n");
-        if (venda.getCpf() != null) cupom.append("CPF do Consumidor: " + venda.getCpf() + "\n");
+        if (venda.getCpf().length() > 10) cupom.append("CPF do Consumidor: " + venda.getCpf() + "\n");
         cupom.append("\n");
 
         cupom.append("PRODUTO - QUANTIDADE - VALOR UNITARIO\n");
@@ -48,7 +48,7 @@ public class CupomService {
         cupom.append("----------------------------------\n");
         cupom.append("\n");
         cupom.append("Obrigado pela sua compra!\n");
-        cupom.append("Obs: Troca em até 2 dias a partir\n");
+        cupom.append("Obs: Troca em ate 2 dias a partir\n");
         cupom.append("da data de venda com apresentacao do cupom!\n");
 
         // Obtenha o serviço de impressão padrão
