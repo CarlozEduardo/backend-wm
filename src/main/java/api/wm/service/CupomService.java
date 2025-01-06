@@ -30,7 +30,12 @@ public class CupomService {
         cupom.append("\n");
         cupom.append("Codigo da Venda: ").append(venda.getId()).append("\n");
         cupom.append("Data: ").append(dataFormatada).append("\n");
-        if (venda.getCpf().length() > 10) cupom.append("CPF do Consumidor: " + venda.getCpf() + "\n");
+
+        if (venda.getCpf().length() > 10) {
+            String cpfFormatado = venda.getCpf().replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+            cupom.append("CPF do Consumidor: ").append(cpfFormatado).append("\n");
+        }
+
         cupom.append("\n");
 
         cupom.append("PRODUTO - QUANTIDADE - VALOR UNITARIO\n");
