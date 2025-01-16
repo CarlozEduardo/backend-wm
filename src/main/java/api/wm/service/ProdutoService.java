@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,5 +69,20 @@ public class ProdutoService {
         }
 
         return produtoRepository.save(produto);
+    }
+
+    public List<Produto> atualizarPreco(double preco, List<String> listCOD) {
+        List<Produto> produtos = new ArrayList<>();
+
+        for (String s : listCOD) {
+            Produto produto = produtoRepository.findByCodigo(s).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            produtos.add(produto);
+        }
+
+        for (Produto produto : produtos) {
+            produto.setPreco(preco);
+        }
+        produtoRepository.saveAll(produtos);
+        return produtos;
     }
 }

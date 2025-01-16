@@ -47,18 +47,11 @@ public class ProdutoController {
         );
     }
 
-    @PatchMapping("/{id}/diminuir/{qtd}")
-    public ResponseEntity<Produto> diminuir(@PathVariable Long id, @PathVariable Double qtd) {
-        return ResponseEntity.ok(
-                produtoService.atualizarQtd(id, qtd, "DIMINUIR")
-        );
-    }
-
-    @PatchMapping("/{id}/aumentar/{qtd}")
-    public ResponseEntity<Produto> adicionar(@PathVariable Long id, @PathVariable Double qtd) {
-        return ResponseEntity.ok(
-                produtoService.atualizarQtd(id, qtd, "AUMENTAR")
-        );
+    @PatchMapping("/mudarpreco/{preco}")
+    public ResponseEntity<List<Produto>> mudarPrecoDaListaProdutos(@PathVariable double preco, @RequestBody List<String> listCOD) {
+        List<Produto> produtos = produtoService.atualizarPreco(preco, listCOD);
+        if (produtos.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(produtos);
     }
 
     @DeleteMapping("/{id}")
