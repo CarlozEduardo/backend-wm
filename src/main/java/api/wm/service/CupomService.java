@@ -38,14 +38,15 @@ public class CupomService {
 
         cupom.append("\n");
 
-        cupom.append("PRODUTO - QUANTIDADE - VALOR UNITARIO\n");
+        cupom.append("PRODUTO - QTD - V. UNI - V. TOTAL\n");
         double total = 0;
         for (Produto produto : venda.getProdutos()) {
 
-            cupom.append(String.format("%-9s %-12.2f %-12s\n", produto.getNome(), produto.getQuantidade(),
-                    String.format("R$ %.2f", produto.getPreco())));
+            double valorTotalProduto = produto.getPreco() * produto.getQuantidade();
+            cupom.append(String.format("%-9s %-4.2f %-9s %-12s\n", produto.getNome(), produto.getQuantidade(),
+                    String.format("R$ %.2f", produto.getPreco()), String.format("R$ %.2f", valorTotalProduto)));
 
-            total += produto.getPreco() * produto.getQuantidade();
+            total += valorTotalProduto;
         }
 
         cupom.append("\nTOTAL: R$ ").append(String.format("%.2f", total)).append("\n");
