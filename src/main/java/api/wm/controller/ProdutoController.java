@@ -1,5 +1,6 @@
 package api.wm.controller;
 
+import api.wm.domain.dto.ProdutoResponseDTO;
 import api.wm.domain.entity.Produto;
 import api.wm.domain.dto.ProdutoRequestDTO;
 import api.wm.domain.mapper.ProdutoMapper;
@@ -27,7 +28,7 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProdutoRequestDTO>> listar() {
+    public ResponseEntity<List<ProdutoResponseDTO>> listar() {
         List<Produto> produtos = produtoService.listar();
         if (produtos.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDTO).toList());
