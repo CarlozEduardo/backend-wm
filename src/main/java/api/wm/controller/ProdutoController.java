@@ -27,10 +27,10 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> listar() {
+    public ResponseEntity<List<ProdutoRequestDTO>> listar() {
         List<Produto> produtos = produtoService.listar();
         if (produtos.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(produtos);
+        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDTO).toList());
     }
 
     @GetMapping("/{id}")

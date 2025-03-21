@@ -15,6 +15,7 @@ public class CategoriaMapper {
     public static CategoriaRequestDTO toDTO(Categoria categoria) {
         if (categoria == null) return null;
         CategoriaRequestDTO categoriaRequestDTO = new CategoriaRequestDTO();
+        categoriaRequestDTO.setId(categoria.getId());
         categoriaRequestDTO.setNome(categoria.getNome());
         return categoriaRequestDTO;
     }

@@ -29,12 +29,12 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Categoria>> listar() {
+    public ResponseEntity<List<CategoriaRequestDTO>> listar() {
         List<Categoria> categorias = categoriaService.listar();
 
         if (categorias.isEmpty()) return ResponseEntity.noContent().build();
 
-        return ResponseEntity.ok(categorias);
+        return ResponseEntity.ok(categorias.stream().map(CategoriaMapper::toDTO).toList());
     }
 
     @GetMapping("/{id}")

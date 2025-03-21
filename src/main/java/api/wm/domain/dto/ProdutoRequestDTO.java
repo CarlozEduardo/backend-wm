@@ -1,21 +1,31 @@
 package api.wm.domain.dto;
 
 public class ProdutoRequestDTO {
+    private Long id;
     private String nome;
     private String codigo;
     private Double preco;
     private Double quantidade;
-    private Long idCategoria;
+    private CategoriaRequestDTO categoria;
 
-    public ProdutoRequestDTO(String nome, String codigo, Double preco, Double quantidade, Long idCategoria) {
+    public ProdutoRequestDTO(Long id, String nome, String codigo, Double preco, Double quantidade, CategoriaRequestDTO idCategoria) {
+        this.id = id;
         this.nome = nome;
         this.codigo = codigo;
         this.preco = preco;
         this.quantidade = quantidade;
-        this.idCategoria = idCategoria;
+        this.categoria = idCategoria;
     }
 
     public ProdutoRequestDTO() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -50,11 +60,11 @@ public class ProdutoRequestDTO {
         this.quantidade = quantidade;
     }
 
-    public Long getIdCategoria() {
-        return idCategoria;
+    public CategoriaRequestDTO getCategoria() {
+        return categoria;
     }
 
-    public void setIdCategoria(Long idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setCategoria(CategoriaRequestDTO categoria) {
+        this.categoria = categoria;
     }
 }

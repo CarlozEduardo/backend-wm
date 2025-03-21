@@ -1,8 +1,10 @@
 package api.wm.service;
 
 import api.wm.domain.entity.Produto;
+import api.wm.domain.entity.Venda;
 import api.wm.repository.CategoriaRepository;
 import api.wm.repository.ProdutoRepository;
+import api.wm.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,6 +20,8 @@ public class ProdutoService {
     private ProdutoRepository produtoRepository;
     @Autowired
     private CategoriaRepository categoriaRepository;
+    @Autowired
+    private VendaRepository vendaRepository;
 
     public Produto salvar(Produto produto) {
         if (produtoRepository.existsByCodigo(produto.getCodigo())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código já existente");
@@ -54,6 +58,17 @@ public class ProdutoService {
 
     public void deletar(Long id) {
         if (!produtoRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe esse id");
+
+        Produto produto = produtoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe esse id"));
+
+        if (!produto.getVendas().isEmpty()) {
+            for (Venda venda : produto.getVendas()) {
+                venda.removerProduto(produto);
+                produto.removeVenda(venda);
+                vendaRepository.delete(venda);
+            }
+        }
+
         produtoRepository.deleteById(id);
     }
 

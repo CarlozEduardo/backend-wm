@@ -1,5 +1,6 @@
 package api.wm.domain.mapper;
 
+import api.wm.domain.dto.CategoriaRequestDTO;
 import api.wm.domain.entity.Categoria;
 import api.wm.domain.entity.Produto;
 import api.wm.domain.dto.ProdutoRequestDTO;
@@ -10,7 +11,7 @@ public class ProdutoMapper {
         if (dto == null) return null;
 
         Categoria categoria = new Categoria();
-        categoria.setId(dto.getIdCategoria());
+        categoria.setId(dto.getCategoria().getId());
 
         Produto produto = new Produto();
         produto.setId(null);
@@ -24,9 +25,13 @@ public class ProdutoMapper {
 
     public static ProdutoRequestDTO toDTO(Produto produto) {
         if (produto == null) return null;
+
+        CategoriaRequestDTO categoriaRequestDTO = new CategoriaRequestDTO(produto.getCategoria().getId(), produto.getCategoria().getNome());
+
         ProdutoRequestDTO dto = new ProdutoRequestDTO();
+        dto.setId(produto.getId());
         dto.setNome(produto.getNome());
-        dto.setIdCategoria(produto.getCategoria().getId());
+        dto.setCategoria(categoriaRequestDTO);
         dto.setCodigo(produto.getCodigo());
         dto.setPreco(produto.getPreco());
         dto.setQuantidade(produto.getQuantidade());

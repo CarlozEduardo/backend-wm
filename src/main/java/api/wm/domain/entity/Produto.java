@@ -84,4 +84,8 @@ public class Produto {
     public void addVenda(Venda venda) {
         this.vendas.add(venda);
     }
+
+    public void removeVenda(Venda venda) {
+        this.vendas.remove(venda);
+    }
 }
