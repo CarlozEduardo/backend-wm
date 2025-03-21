@@ -37,24 +37,28 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ProdutoResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(
+                ProdutoMapper.toDTO(
                 produtoService.buscarPorId(id)
+                )
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO) {
+    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO) {
         return ResponseEntity.ok(
+                ProdutoMapper.toDTO(
                 produtoService.atualizar(id, ProdutoMapper.to(produtoRequestDTO))
+                )
         );
     }
 
     @PatchMapping("/mudarpreco/{preco}")
-    public ResponseEntity<List<Produto>> mudarPrecoDaListaProdutos(@PathVariable double preco, @RequestBody List<String> listCOD) {
+    public ResponseEntity<List<ProdutoResponseDTO>> mudarPrecoDaListaProdutos(@PathVariable double preco, @RequestBody List<String> listCOD) {
         List<Produto> produtos = produtoService.atualizarPreco(preco, listCOD);
         if (produtos.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(produtos);
+        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDTO).toList());
     }
 
     @DeleteMapping("/{id}")
