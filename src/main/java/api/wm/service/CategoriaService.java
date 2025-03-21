@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+    @Autowired private ProdutoService produtoService;
 
     public Categoria salvar(Categoria categoria) {
         if (categoriaRepository.existsByNome(categoria.getNome())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome já existente");
@@ -32,6 +35,13 @@ public class CategoriaService {
 
     public void deletar(Long id) {
         if (!categoriaRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        Categoria categoria = categoriaRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+        );
+
+        if (!categoria.getProdutos().isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT, "Existem produtos associados a categoria!");
+
         categoriaRepository.deleteById(id);
     }
 
