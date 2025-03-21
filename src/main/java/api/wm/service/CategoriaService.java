@@ -20,6 +20,9 @@ public class CategoriaService {
 
     public Categoria salvar(Categoria categoria) {
         if (categoriaRepository.existsByNome(categoria.getNome())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome já existente");
+
+        if (categoria.getNome().isBlank()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Erro na escrita do nome");
+
         return categoriaRepository.save(categoria);
     }
 
