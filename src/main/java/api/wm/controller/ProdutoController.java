@@ -19,10 +19,12 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @PostMapping
-    public ResponseEntity<Produto> criar(@RequestBody ProdutoRequestDTO produto) {
+    public ResponseEntity<ProdutoResponseDTO> criar(@RequestBody ProdutoRequestDTO produto) {
         return ResponseEntity.ok(
+                ProdutoMapper.toDTO(
                 produtoService.salvar(
                         ProdutoMapper.to(produto)
+                )
                 )
         );
     }
